@@ -1,0 +1,78 @@
+<android.support.percent.PercentFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/grid"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:columnCount="4"
+    android:rowCount="4"
+    tools:context=".activities.PagerActivity">
+
+    <FrameLayout
+        android:id="@+id/percent1"
+        style="@style/percent" />
+
+    <FrameLayout
+        android:id="@+id/percent2"
+        style="@style/percent"
+        app:layout_marginLeftPercent="33.3333333333%" />
+
+    <FrameLayout
+        android:id="@+id/percent3"
+        style="@style/percent"
+        app:layout_marginLeftPercent="66.6666666666%" />
+
+
+    <FrameLayout
+        android:id="@+id/percent4"
+        style="@style/percent"
+        app:layout_marginTopPercent="25%" />
+
+    <FrameLayout
+        android:id="@+id/percent5"
+        style="@style/percent"
+        app:layout_marginLeftPercent="33.3333333333%"
+        app:layout_marginTopPercent="25%" />
+
+    <FrameLayout
+        android:id="@+id/percent6"
+        style="@style/percent"
+        app:layout_marginLeftPercent="66.6666666666%"
+        app:layout_marginTopPercent="25%" />
+
+    <FrameLayout
+        android:id="@+id/percent7"
+        style="@style/percent"
+        app:layout_marginTopPercent="50%" />
+
+    <FrameLayout
+        android:id="@+id/percent8"
+        style="@style/percent"
+        app:layout_marginLeftPercent="33.3333333333%"
+        app:layout_marginTopPercent="50%" />
+
+    <FrameLayout
+        android:id="@+id/percent9"
+        style="@style/percent"
+        app:layout_marginLeftPercent="66.6666666666%"
+        app:layout_marginTopPercent="50%" />
+
+    <FrameLayout
+        android:id="@+id/percent10"
+        style="@style/percent"
+        app:layout_marginLeftPercent="0%"
+        app:layout_marginTopPercent="75%" />
+
+    <FrameLayout
+        android:id="@+id/percent11"
+        style="@style/percent"
+        app:layout_marginLeftPercent="33.3333333333%"
+        app:layout_marginTopPercent="75%" />
+
+    <FrameLayout
+        android:id="@+id/percent12"
+        style="@style/percent"
+        app:layout_marginLeftPercent="66.6666666666%"
+        app:layout_marginTopPercent="75%" />
+
+</android.support.percent.PercentFrameLayout>
