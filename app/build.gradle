@@ -6,7 +6,7 @@ android {
     buildToolsVersion "24.0.0"
 
     defaultConfig {
-        applicationId "kidslauncher.alex.softteco.com.kidslauncher"
+        applicationId "kidslauncher.alex.com.kidslauncher"
         minSdkVersion 16
         targetSdkVersion 24
         versionCode 1
@@ -33,8 +33,8 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
 
+    //    compile 'com.google.guava:guava:19.0'
     compile 'com.annimon:stream:1.1.2'
-//    compile 'com.google.guava:guava:19.0'
 
     compile 'com.android.support:support-v13:24.2.1'
     compile 'com.android.support:appcompat-v7:24.2.1'
@@ -42,6 +42,7 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:24.2.1'
     compile 'com.android.support:cardview-v7:24.2.1'
     compile 'com.android.support:percent:24.2.1'
+    compile 'com.android.support:support-v4:24.2.1'
 
     compile 'com.google.code.gson:gson:2.7'
 }

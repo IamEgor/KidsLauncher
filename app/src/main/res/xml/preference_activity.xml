@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="@string/block_incoming_calls_pref"
+        android:summary="Block incoming calls"
+        android:title="Call" />
+
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="@string/disable_wifi_pref"
+        android:summary="Disable WiFi"
+        android:title="Wifi" />
+
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="@string/start_on_boot_pref"
+        android:summary="Start on boot"
+        android:title="Launch" />
+
+    <Preference
+        android:key="@string/reset_selected_apps"
+        android:persistent="false"
+        android:title="Reset selected apps" />
+
+</PreferenceScreen>
