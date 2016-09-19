@@ -88,7 +88,7 @@ public class SelectAppsActivity extends AppCompatActivity implements
         Intent intent = new Intent();
         final String packageName = getPackageName();
         ArrayList<AppItemModel> collect = Stream.of(adapter.getModels())
-                .filter(value -> (value.isSelected()))//|| packageName.equals(value.getPackageName())))
+                .filter(AppItemModel::isSelected)//|| packageName.equals(value.getPackageName())))
 //                .sorted((appItemModel, t1) -> appItemModel.getPackageName().equals(packageName) ? -1 : 0)
                 .collect(Collectors.toCollection(ArrayList::new));
         intent.putParcelableArrayListExtra(KEY_APPS, collect);

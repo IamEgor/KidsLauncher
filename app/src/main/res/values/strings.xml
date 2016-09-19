@@ -10,6 +10,10 @@
     <string name="disable_wifi_pref">disable_wifi_pref</string>
     <string name="start_on_boot_pref">start_on_boot_pref</string>
     <string name="reset_selected_apps">reset_selected_apps</string>
+    <string name="on_back_pressed_message">To exit form the app tap on \'Exit icon\"</string>
+    <string name="no_apps_selected_message">No apps selected</string>
+    <string name="clear_selected_apps_title">Clear selected apps</string>
+    <string name="clear_selected_apps_message">You really want to clear selected apps list?</string>
 
 
 </resources>

@@ -3,6 +3,8 @@ package kidslauncher.alex.com.kidslauncher.ui.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.List;
+
 public class AppItemModel implements Parcelable {
 
     public static final Parcelable.Creator<AppItemModel> CREATOR = new Parcelable.Creator<AppItemModel>() {
@@ -19,25 +21,29 @@ public class AppItemModel implements Parcelable {
 
     private String packageName;
     private String label;
+    private List<String> permissions;
     private boolean selected;
 
     public AppItemModel() {
     }
 
-    public AppItemModel(String packageName, String label) {
+    public AppItemModel(String packageName, String label, List<String> permissions) {
         this.packageName = packageName;
         this.label = label;
+        this.permissions = permissions;
     }
 
-    public AppItemModel(String packageName, String label, boolean selected) {
+    public AppItemModel(String packageName, String label, List<String> permissions, boolean selected) {
         this.packageName = packageName;
         this.label = label;
+        this.permissions = permissions;
         this.selected = selected;
     }
 
     protected AppItemModel(Parcel in) {
         this.packageName = in.readString();
         this.label = in.readString();
+        this.permissions = in.createStringArrayList();
         this.selected = in.readByte() != 0;
     }
 
@@ -57,6 +63,14 @@ public class AppItemModel implements Parcelable {
         this.label = label;
     }
 
+    public List<String> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(List<String> permissions) {
+        this.permissions = permissions;
+    }
+
     public boolean isSelected() {
         return selected;
     }
@@ -74,15 +88,8 @@ public class AppItemModel implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.packageName);
         dest.writeString(this.label);
+        dest.writeStringList(this.permissions);
         dest.writeByte(this.selected ? (byte) 1 : (byte) 0);
     }
 
-    @Override
-    public String toString() {
-        return "AppItemModel{" +
-                "packageName='" + packageName + '\'' +
-                ", label='" + label + '\'' +
-                ", selected=" + selected +
-                '}';
-    }
 }

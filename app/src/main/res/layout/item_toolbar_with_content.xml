@@ -40,40 +40,58 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toEndOf="@+id/left_toolbar_btn"
-            android:layout_toLeftOf="@+id/right_toolbar_btn_additional"
+            android:layout_toLeftOf="@+id/button_panel"
             android:layout_toRightOf="@+id/left_toolbar_btn"
-            android:layout_toStartOf="@+id/right_toolbar_btn_additional"
+            android:layout_toStartOf="@+id/button_panel"
             android:ellipsize="end"
             android:singleLine="true"
             android:text="@string/app_name"
             android:textColor="@android:color/white" />
 
-        <ImageView
-            android:id="@+id/right_toolbar_btn_additional"
+        <LinearLayout
+            android:id="@+id/button_panel"
             android:layout_width="wrap_content"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_gravity="center"
-            android:layout_toLeftOf="@+id/right_toolbar_btn"
-            android:clickable="false"
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp"
-            android:src="@drawable/ic_close_black_24dp"
-            android:tint="@android:color/white"
-            android:visibility="gone" />
-
-        <ImageView
-            android:id="@+id/right_toolbar_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_gravity="center"
-            android:clickable="false"
-            android:paddingLeft="12dp"
-            android:paddingRight="12dp"
-            android:src="@drawable/ic_close_black_24dp"
-            android:tint="@android:color/white"
-            android:visibility="visible" />
+            android:layout_alignParentRight="true">
+
+            <ImageView
+                android:id="@+id/right_toolbar_btn_additional"
+                android:layout_width="wrap_content"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_gravity="center"
+                android:clickable="false"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:src="@drawable/ic_close_black_24dp"
+                android:tint="@android:color/white"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/right_toolbar_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_gravity="center"
+                android:clickable="false"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:src="@drawable/ic_close_black_24dp"
+                android:tint="@android:color/white"
+                android:visibility="visible" />
+
+            <ImageView
+                android:id="@+id/exit_toolbar_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_gravity="center"
+                android:clickable="false"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:src="@drawable/ic_exit_to_app_black_24dp"
+                android:tint="@android:color/white"
+                android:visibility="gone" />
+
+        </LinearLayout>
 
     </RelativeLayout>
 

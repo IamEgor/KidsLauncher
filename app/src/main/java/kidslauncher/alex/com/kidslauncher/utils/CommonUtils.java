@@ -1,10 +1,15 @@
 package kidslauncher.alex.com.kidslauncher.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.wifi.WifiManager;
 import android.os.RemoteException;
+import android.support.annotation.StringRes;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.Toast;
 
 import com.android.internal.telephony.ITelephony;
 
@@ -13,6 +18,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Collections;
+import java.util.List;
 
 import kidslauncher.alex.com.kidslauncher.KidsLauncherApp;
 
@@ -74,6 +81,20 @@ public class CommonUtils {
         md.update(text.getBytes("iso-8859-1"), 0, text.length());
         byte[] sha1hash = md.digest();
         return convertToHex(sha1hash);
+    }
+
+    public static boolean notContainsDangerousPermissions(List<String> permissions) {
+        return Collections.disjoint(Constants.PERMISSIONS, permissions);
+    }
+
+    public static void displayToastUnderView(Activity activity, View view, @StringRes int id) {
+        displayToastUnderView(activity, view, activity.getString(id));
+    }
+
+    public static void displayToastUnderView(Activity activity, View view, String text) {
+        Toast toast = Toast.makeText(activity, text, Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.TOP, view.getLeft() - view.getWidth() / 2 - toast.getView().getWidth() / 2, view.getBottom());
+        toast.show();
     }
 
 }
