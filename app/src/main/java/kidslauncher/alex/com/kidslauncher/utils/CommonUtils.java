@@ -27,9 +27,9 @@ public class CommonUtils {
 
     private static final String TAG = CommonUtils.class.getSimpleName();
 
-    public static void disableWifi() {
+    public static void setWifiEnabled(boolean enabled) {
         WifiManager wifiManager = (WifiManager) KidsLauncherApp.getInstance().getSystemService(Context.WIFI_SERVICE);
-        wifiManager.setWifiEnabled(!wifiManager.isWifiEnabled());
+        wifiManager.setWifiEnabled(enabled);
     }
 
     public static void setMobileDataState(boolean mobileDataEnabled) {
