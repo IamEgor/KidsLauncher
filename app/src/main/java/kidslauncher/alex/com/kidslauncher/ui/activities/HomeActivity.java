@@ -6,8 +6,8 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.util.List;
@@ -27,10 +27,6 @@ public class HomeActivity extends AbstractActivity {
     public static final String TAG = HomeActivity.class.getSimpleName();
     public static final int REQUEST_CODE = 1;
 
-    private ImageView mLeftButton;
-    private ImageView mRightButton;
-    private ImageView mRightButtonAdditional;
-    private ImageView mExitButton;
     private View mNoAppsLayout;
     private ViewPager mViewPager;
 
@@ -43,7 +39,7 @@ public class HomeActivity extends AbstractActivity {
     private PositiveAction turnOn = () -> {
         childModeEnabled = !childModeEnabled;
         mRightButtonAdditional.setColorFilter(getResources().getColor(childModeEnabled ? R.color.colorAccent : R.color.white));
-        CommonUtils.disableWifi();
+        CommonUtils.setWifiEnabled(false);
         PreferencesUtil.getInstance().setBlockIncoming(childModeEnabled);
         PreferencesUtil.getInstance().setBlockWifi(childModeEnabled);
     };
@@ -53,7 +49,6 @@ public class HomeActivity extends AbstractActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
         initViews();
         mHomeWatcher = new HomeWatcher(this);
         mHomeWatcher.setOnHomePressedListener(new OnHomePressedListener() {
@@ -77,6 +72,7 @@ public class HomeActivity extends AbstractActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
         if (data == null) {
             return;
         }
@@ -92,25 +88,9 @@ public class HomeActivity extends AbstractActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(TAG);
-        filter.addCategory(Intent.CATEGORY_DEFAULT);
-        AlarmUtils.scheduleRepetingAlarm(5 * 1000);
-        mReceiver = new AlarmReceiver();
-        registerReceiver(mReceiver, filter);
-    }
-
-    @Override
     protected void onStop() {
         super.onStop();
         Log.w(TAG, "onStop(); isAfterLongPressHomeButton = " + isAfterLongPressHomeButton);
-        if (mReceiver != null) {
-            unregisterReceiver(mReceiver);
-            mReceiver = null;
-        }
-        AlarmUtils.cancelAlarm();
     }
 
     @Override
@@ -131,17 +111,20 @@ public class HomeActivity extends AbstractActivity {
     @Override
     public void onBackPressed() {
         Toast.makeText(HomeActivity.this, R.string.on_back_pressed_message, Toast.LENGTH_SHORT).show();
-        super.onBackPressed();
     }
 
-//    @Override
-//    public boolean onKeyDown(int keyCode, KeyEvent event) {
-//        if (keyCode == KeyEvent.KEYCODE_BACK) {
-//            Toast.makeText(HomeActivity.this, "onKeyDown onBackPressed", Toast.LENGTH_SHORT).show();
-//            return true;
-//        }
-//        return super.onKeyDown(keyCode, event);
-//    }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_HOME) {
+            Toast.makeText(HomeActivity.this, "onKeyDown KEYCODE_HOME", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        if (keyCode == KeyEvent.KEYCODE_MOVE_HOME) {
+            Toast.makeText(HomeActivity.this, "onKeyDown KEYCODE_MOVE_HOME", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
     @Override
     protected void onResume() {
@@ -154,15 +137,17 @@ public class HomeActivity extends AbstractActivity {
         } else {
             showContentLayout(false);
         }
+        setTimer(8 * 1000);
+    }
+
+    @Override
+    int setContentViewResource() {
+        return R.layout.activity_home;
     }
 
     private void initViews() {
-        mLeftButton = (ImageView) findViewById(R.id.left_toolbar_btn);
-        mRightButton = (ImageView) findViewById(R.id.right_toolbar_btn);
-        mRightButtonAdditional = (ImageView) findViewById(R.id.right_toolbar_btn_additional);
-        mExitButton = (ImageView) findViewById(R.id.exit_toolbar_btn);
         mNoAppsLayout = findViewById(R.id.item_no_selected);
-        mViewPager = (ViewPager) findViewById(R.id.content);
+        mViewPager = (ViewPager) findViewById(R.id.selected_apps_viewpager);
 
         mLeftButton.setVisibility(View.INVISIBLE);
         mRightButton.setVisibility(View.VISIBLE);
@@ -180,7 +165,6 @@ public class HomeActivity extends AbstractActivity {
             }
         });
         mRightButton.setOnClickListener(view -> actAfterPasswordAccepted(settingsAction));
-        mExitButton.setOnClickListener(view -> actAfterPasswordAccepted(this::finish));
     }
 
     private void showContentLayout(boolean show) {

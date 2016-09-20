@@ -1,7 +1,9 @@
 package kidslauncher.alex.com.kidslauncher.ui.activities;
 
 import android.app.AlertDialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
@@ -12,7 +14,9 @@ import android.widget.LinearLayout;
 import kidslauncher.alex.com.kidslauncher.R;
 import kidslauncher.alex.com.kidslauncher.utils.PreferencesUtil;
 
-public class SettingsActivity extends PreferenceActivity {
+public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
+
+    private ListPreference mListPreference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +25,7 @@ public class SettingsActivity extends PreferenceActivity {
         manager.setSharedPreferencesName(PreferencesUtil.PREFS_NAME);
         addPreferencesFromResource(R.xml.preference_activity);
         Preference myPref = findPreference(getString(R.string.reset_selected_apps));
+        mListPreference = (ListPreference) findPreference(getString(R.string.timer_interval_pref));
         myPref.setOnPreferenceClickListener(preference -> {
             AlertDialog.Builder alert = new AlertDialog.Builder(SettingsActivity.this);
             alert.setTitle(getString(R.string.clear_selected_apps_title));
@@ -47,4 +52,23 @@ public class SettingsActivity extends PreferenceActivity {
         bar.setNavigationOnClickListener(v -> finish());
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        mListPreference.setSummary(getString(R.string.timer_interval_time));
+        getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals(getString(R.string.use_timer_pref))) {
+//            mListPreference.setSummary(getString(R.string.timer_interval_time, ));
+        }
+    }
 }

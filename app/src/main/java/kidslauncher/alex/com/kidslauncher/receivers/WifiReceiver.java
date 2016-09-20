@@ -17,7 +17,7 @@ public class WifiReceiver extends BroadcastReceiver {
         NetworkInfo netInfo = conMan.getActiveNetworkInfo();
         if (netInfo != null && netInfo.getType() == ConnectivityManager.TYPE_WIFI) {
             if (PreferencesUtil.getInstance().isBlockWifi()) {
-                CommonUtils.disableWifi();
+                CommonUtils.setWifiEnabled(false);
             }
         }
     }
