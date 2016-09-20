@@ -18,7 +18,6 @@ public class AlarmUtils {
     public static void scheduleRepeatingAlarm(long timerTime) {
         final KidsLauncherApp context = KidsLauncherApp.getInstance();
         final AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-//        final Intent intent = new Intent(context, AlarmReceiver.class);
         final Intent intent = new Intent(AbstractActivity.ALARM_ACTION);
         final PendingIntent pendingIntent = PendingIntent.getBroadcast(context, REQUEST_CODE, intent, 0);
 

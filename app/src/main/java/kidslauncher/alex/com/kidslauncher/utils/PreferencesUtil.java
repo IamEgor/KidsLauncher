@@ -29,7 +29,6 @@ public class PreferencesUtil {
     private static final String KEY_BLOCK_INCOMING = KidsLauncherApp.getInstance().getString(R.string.block_incoming_calls_pref);
     private static final String KEY_DISABLE_WIFI = KidsLauncherApp.getInstance().getString(R.string.disable_wifi_pref);
     private static final String KEY_BOOT_ON_START = KidsLauncherApp.getInstance().getString(R.string.start_on_boot_pref);
-    ;
 
     private static volatile PreferencesUtil instance;
 
@@ -96,9 +95,12 @@ public class PreferencesUtil {
         return getObject(KEY_SELECTED_APPS, listOfTestObject);
     }
 
+    public boolean isUsingTimer() {
+        return settings.getBoolean(KidsLauncherApp.getInstance().getString(R.string.use_timer_pref), false);
+    }
+
     public int getTimerInterval() {
-        return settings.getInt(KidsLauncherApp.getInstance().getString(R.string.timer_interval_time),
-                Integer.parseInt(KidsLauncherApp.getInstance().getResources().getString(R.string.default_timer_value)));
+        return Integer.parseInt(settings.getString(KidsLauncherApp.getInstance().getString(R.string.timer_interval_pref), KidsLauncherApp.getInstance().getResources().getString(R.string.default_timer_value)));
     }
 
     public void dropSelectedAppsList() {

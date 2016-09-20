@@ -72,7 +72,6 @@ public class HomeActivity extends AbstractActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
         if (data == null) {
             return;
         }
@@ -96,12 +95,6 @@ public class HomeActivity extends AbstractActivity {
     @Override
     protected void onDestroy() {
         Log.w(TAG, "onDestroy(); isAfterLongPressHomeButton = " + isAfterLongPressHomeButton);
-//        if (isAfterLongPressHomeButton) {
-//            Log.w(TAG, "trying to restart");
-//            Intent i = new Intent(HomeActivity.this, HomeActivity.class);
-////            i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-//            startActivity(i);
-//        }
         if (mHomeWatcher != null) {
             mHomeWatcher.stopWatch();
         }
@@ -137,7 +130,6 @@ public class HomeActivity extends AbstractActivity {
         } else {
             showContentLayout(false);
         }
-        setTimer(8 * 1000);
     }
 
     @Override
@@ -156,14 +148,7 @@ public class HomeActivity extends AbstractActivity {
         mRightButtonAdditional.setImageResource(R.drawable.ic_power_settings_new_black_24dp);
         mExitButton.setVisibility(View.VISIBLE);
 
-        mRightButtonAdditional.setOnClickListener(view -> {
-            final List<AppItemModel> selectedApps = PreferencesUtil.getInstance().getSelectedApps();
-            if (selectedApps == null || selectedApps.size() == 0) {
-                Toast.makeText(HomeActivity.this, R.string.no_apps_selected_message, Toast.LENGTH_SHORT).show();
-            } else {
-                actAfterPasswordAccepted(turnOn);
-            }
-        });
+        mRightButtonAdditional.setOnClickListener(view -> actAfterPasswordAccepted(turnOn));
         mRightButton.setOnClickListener(view -> actAfterPasswordAccepted(settingsAction));
     }
 

@@ -14,7 +14,7 @@ import android.widget.LinearLayout;
 import kidslauncher.alex.com.kidslauncher.R;
 import kidslauncher.alex.com.kidslauncher.utils.PreferencesUtil;
 
-public class SettingsActivity extends PreferenceActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class SettingsActivity extends PreferenceActivity {
 
     private ListPreference mListPreference;
 
@@ -52,23 +52,4 @@ public class SettingsActivity extends PreferenceActivity implements SharedPrefer
         bar.setNavigationOnClickListener(v -> finish());
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-//        mListPreference.setSummary(getString(R.string.timer_interval_time));
-        getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
-    }
-
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals(getString(R.string.use_timer_pref))) {
-//            mListPreference.setSummary(getString(R.string.timer_interval_time, ));
-        }
-    }
 }

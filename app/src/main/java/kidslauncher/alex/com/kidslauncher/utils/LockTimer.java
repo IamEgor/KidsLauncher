@@ -16,6 +16,11 @@ public class LockTimer extends CountDownTimer{
         mTimerCallbacks.onTimerTick(millisUntilFinished);
     }
 
+    public void stopTimer(){
+        mTimerCallbacks = null;
+        cancel();
+    }
+
     @Override
     public void onFinish() {
         mTimerCallbacks.onTimerFinish();

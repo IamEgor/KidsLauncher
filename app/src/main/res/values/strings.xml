@@ -14,8 +14,8 @@
     <string name="no_apps_selected_message">No apps selected</string>
     <string name="clear_selected_apps_title">Clear selected apps</string>
     <string name="clear_selected_apps_message">You really want to clear selected apps list?</string>
-    <string name="timer_interval_pref">timer_interval_pref</string>
     <string name="use_timer_pref">use_timer_pref</string>
+    <string name="timer_interval_pref">timer_interval_pref</string>
     <string name="timer_interval_time">Timer interval time is %s</string>
     <string name="default_timer_value">30</string>
 

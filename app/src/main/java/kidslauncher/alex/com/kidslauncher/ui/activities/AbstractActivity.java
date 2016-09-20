@@ -2,6 +2,7 @@ package kidslauncher.alex.com.kidslauncher.ui.activities;
 
 import android.app.AlertDialog;
 import android.app.FragmentManager;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.LayoutRes;
@@ -28,8 +29,10 @@ import kidslauncher.alex.com.kidslauncher.utils.PreferencesUtil;
 
 public abstract class AbstractActivity extends AppCompatActivity implements
         ExitDialog.ExitDialogListener,
-        LockTimer.TimerCallbacks {
-//        SharedPreferences.OnSharedPreferenceChangeListener {
+        LockTimer.TimerCallbacks,
+        SharedPreferences.OnSharedPreferenceChangeListener {
+
+    public static final String TAG = AbstractActivity.class.getSimpleName();
 
     public static final String ALARM_ACTION = "kidslauncher.alex.com.kidslauncher.ui.activities.AbstractActivity";
 
@@ -39,10 +42,14 @@ public abstract class AbstractActivity extends AppCompatActivity implements
     protected ImageView mExitButton;
 
     private View mTimeIsOverView;
+    private EditText mPassword;
+    private TextInputLayout mIputLayout;
     private AppCompatButton mContinue;
     private AppCompatButton mEnd;
     private FrameLayout contentContainer;
     private View activityContent;
+
+    private LockTimer mLockTimer;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,6 +61,8 @@ public abstract class AbstractActivity extends AppCompatActivity implements
         mRightButtonAdditional = (ImageView) findViewById(R.id.right_toolbar_btn_additional);
         mExitButton = (ImageView) findViewById(R.id.exit_toolbar_btn);
 
+        mPassword = (EditText) findViewById(R.id.password);
+        mIputLayout = (TextInputLayout) findViewById(R.id.password_input_layout);
         mTimeIsOverView = findViewById(R.id.time_is_over_layout);
         mContinue = (AppCompatButton) findViewById(R.id.continue_btn);
         mEnd = (AppCompatButton) findViewById(R.id.exit_btn);
@@ -62,24 +71,50 @@ public abstract class AbstractActivity extends AppCompatActivity implements
         activityContent = getLayoutInflater().inflate(setContentViewResource(), contentContainer, false);
         contentContainer.addView(activityContent);
 
+        mContinue.setOnClickListener(view -> {
+            if (isMatchingPassword(mPassword.getText().toString())) {
+                showContentView(true);
+                setTimer(PreferencesUtil.getInstance().getTimerInterval() * 60 * 1000);
+            } else {
+                mIputLayout.setError("Password doesn't match");
+            }
+        });
+        mEnd.setOnClickListener(view -> {
+            if (isMatchingPassword(mPassword.getText().toString())) {
+                finish();
+            } else {
+                mIputLayout.setError("Password doesn't match");
+            }
+        });
         mExitButton.setOnClickListener(view -> actAfterPasswordAccepted(this::finish));
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-//        PreferencesUtil.getInstance().getPreferences().registerOnSharedPreferenceChangeListener(this);
+        PreferencesUtil.getInstance().getPreferences().registerOnSharedPreferenceChangeListener(this);
+        if (PreferencesUtil.getInstance().isUsingTimer()) {
+            setTimer(PreferencesUtil.getInstance().getTimerInterval() * 60 * 1000);
+        } else {
+            stopTimer();
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-//        PreferencesUtil.getInstance().getPreferences().unregisterOnSharedPreferenceChangeListener(this);
+        PreferencesUtil.getInstance().getPreferences().unregisterOnSharedPreferenceChangeListener(this);
     }
 
     protected void setTimer(long delay) {
-        Log.w("LockTimer","setTimer");
-        new LockTimer(delay, 1000, this).start();
+        if (PreferencesUtil.getInstance().isUsingTimer()) {
+            Log.w(TAG, "setTimer timeInMinutes = " + (delay / 1000 / 60));
+            if (mLockTimer != null) {
+                mLockTimer.stopTimer();
+            }
+            mLockTimer = new LockTimer(delay, 1000, this);
+            mLockTimer.start();
+        }
     }
 
     protected void actAfterPasswordAccepted(@NonNull PositiveAction action) {
@@ -99,13 +134,17 @@ public abstract class AbstractActivity extends AppCompatActivity implements
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
         alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
-            if (PreferencesUtil.getInstance().isMatchingPassword(input.getText().toString())) {
+            if (isMatchingPassword(input.getText().toString())) {
                 alertDialog.dismiss();
                 action.act();
             } else {
                 inputLayout.setError("Wrong password");
             }
         });
+    }
+
+    private boolean isMatchingPassword(String input) {
+        return PreferencesUtil.getInstance().isMatchingPassword(input);
     }
 
     protected void showExitDialog() {
@@ -135,9 +174,34 @@ public abstract class AbstractActivity extends AppCompatActivity implements
 
     @Override
     public void onTimerFinish() {
-        Log.w("LockTimer","onTimerFinish");
-        activityContent.setVisibility(View.GONE);
-        mTimeIsOverView.setVisibility(View.VISIBLE);
+        Log.w(TAG, "onTimerFinish");
+        showContentView(false);
+    }
+
+    private void showContentView(boolean b) {
+        activityContent.setVisibility(b ? View.VISIBLE : View.GONE);
+        mTimeIsOverView.setVisibility(b ? View.GONE : View.VISIBLE);
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+
+        if (getString(R.string.use_timer_pref).equals(s)) {
+            boolean setTimer = sharedPreferences.getBoolean(s, false);
+            if (setTimer) {
+                String intervalStr = sharedPreferences.getString(getString(R.string.timer_interval_pref), getString(R.string.default_timer_value));
+                int timeInMinutes = Integer.parseInt(intervalStr);
+                setTimer(timeInMinutes * 60 * 1000);
+            } else {
+                stopTimer();
+            }
+        }
+
+    }
+
+    private void stopTimer() {
+        mLockTimer.stopTimer();
+        mLockTimer = null;
     }
 
     public interface PositiveAction {

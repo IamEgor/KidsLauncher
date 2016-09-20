@@ -10,7 +10,7 @@ import kidslauncher.alex.com.kidslauncher.utils.CommonUtils;
 
 public class CallReceiver extends AbstractPhoneCallReceiver {
 
-    private static final String TAG = "[" + CallReceiver.class.getSimpleName() + "]";
+    private static final String TAG = CallReceiver.class.getSimpleName();
 
     @Override
     protected void onIncomingCallReceived(Context ctx, String number, Date start) {
