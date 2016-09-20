@@ -24,7 +24,7 @@ import kidslauncher.alex.com.kidslauncher.utils.PreferencesUtil;
 
 public class HomeActivity extends AbstractActivity {
 
-    public static final String TAG = HomeActivity.class.getName();
+    public static final String TAG = HomeActivity.class.getSimpleName();
     public static final int REQUEST_CODE = 1;
 
     private ImageView mLeftButton;
