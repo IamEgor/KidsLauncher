@@ -19,4 +19,10 @@
     <string name="timer_interval_time">Timer interval time is %s</string>
     <string name="default_timer_value">30</string>
 
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
+
+    <string name="enter_password">Enter password</string>
+    <string name="wrong_password">Wrong password</string>
+
 </resources>
