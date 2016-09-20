@@ -7,7 +7,6 @@ import kidslauncher.alex.com.kidslauncher.utils.PreferencesUtil;
 public class KidsLauncherApp extends Application {
 
     private static KidsLauncherApp instance;
-//    private boolean blockIncoming;
 
     @Override
     public void onCreate() {

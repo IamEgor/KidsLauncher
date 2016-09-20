@@ -7,21 +7,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.widget.EditText;
 
+import kidslauncher.alex.com.kidslauncher.R;
 import kidslauncher.alex.com.kidslauncher.utils.PreferencesUtil;
 
 public abstract class AbstractActivity extends AppCompatActivity {
 
     protected void actAfterPasswordAccepted(@NonNull PositiveAction action) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Enter password");
+        builder.setTitle(R.string.enter_password);
         final EditText input = new EditText(this);
         final TextInputLayout inputLayout = new TextInputLayout(this);
         inputLayout.addView(input);
         input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         builder.setView(inputLayout);
-        builder.setPositiveButton("OK", (dialog, which) -> {
+        builder.setPositiveButton(R.string.ok, (dialog, which) -> {
         });
-        builder.setNegativeButton("Cancel", (dialog, which) -> {
+        builder.setNegativeButton(R.string.cancel, (dialog, which) -> {
             dialog.cancel();
         });
 
@@ -32,7 +33,7 @@ public abstract class AbstractActivity extends AppCompatActivity {
                 alertDialog.dismiss();
                 action.act();
             } else {
-                inputLayout.setError("Wrong password");
+                inputLayout.setError(getString(R.string.wrong_password));
             }
         });
     }

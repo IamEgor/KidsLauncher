@@ -73,7 +73,7 @@ public class SelectAppsActivity extends AppCompatActivity implements
         mLeftButton = (ImageView) findViewById(R.id.left_toolbar_btn);
         mRightButton = (ImageView) findViewById(R.id.right_toolbar_btn);
         mRightButtonAdditional = (ImageView) findViewById(R.id.right_toolbar_btn_additional);
-        mRecyclerView = (RecyclerView) findViewById(R.id.rv);
+        mRecyclerView = (RecyclerView) findViewById(R.id.appsRv);
 
         mLeftButton.setVisibility(View.VISIBLE);
         mLeftButton.setImageResource(R.drawable.ic_arrow_back_black_24dp);

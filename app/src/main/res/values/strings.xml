@@ -15,5 +15,11 @@
     <string name="clear_selected_apps_title">Clear selected apps</string>
     <string name="clear_selected_apps_message">You really want to clear selected apps list?</string>
 
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
+
+    <string name="enter_password">Enter password</string>
+    <string name="wrong_password">Wrong password</string>
+
 
 </resources>
