@@ -10,7 +10,7 @@ import kidslauncher.alex.com.kidslauncher.utils.PreferencesUtil;
 
 public class StartUpBootReceiver extends BroadcastReceiver {
 
-    public static final String TAG = StartUpBootReceiver.class.getName();
+    public static final String TAG = StartUpBootReceiver.class.getSimpleName();
 
     @Override
     public void onReceive(Context context, Intent intent) {

@@ -25,6 +25,8 @@ import kidslauncher.alex.com.kidslauncher.KidsLauncherApp;
 
 public class CommonUtils {
 
+    private static final String TAG = CommonUtils.class.getSimpleName();
+
     public static void disableWifi() {
         WifiManager wifiManager = (WifiManager) KidsLauncherApp.getInstance().getSystemService(Context.WIFI_SERVICE);
         wifiManager.setWifiEnabled(!wifiManager.isWifiEnabled());
@@ -38,7 +40,7 @@ public class CommonUtils {
                 setMobileDataEnabledMethod.invoke(telephonyService, mobileDataEnabled);
             }
         } catch (Exception ex) {
-            Log.e("CommonUtils", "Error setting mobile data state", ex);
+            Log.e(TAG, "Error setting mobile data state", ex);
         }
     }
 

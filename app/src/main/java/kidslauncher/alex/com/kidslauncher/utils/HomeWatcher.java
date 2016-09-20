@@ -8,7 +8,8 @@ import android.util.Log;
 
 public class HomeWatcher {
 
-    private static final String TAG = "hg";
+    private static final String TAG = HomeWatcher.class.getSimpleName();
+
     private Context mContext;
     private IntentFilter mFilter;
     private OnHomePressedListener mListener;
