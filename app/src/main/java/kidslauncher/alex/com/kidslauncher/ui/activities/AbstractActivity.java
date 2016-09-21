@@ -22,6 +22,7 @@ import android.widget.Toast;
 import java.util.Locale;
 import java.util.TimerTask;
 
+import kidslauncher.alex.com.kidslauncher.AppConstants;
 import kidslauncher.alex.com.kidslauncher.R;
 import kidslauncher.alex.com.kidslauncher.ui.fragments.ExitDialog;
 import kidslauncher.alex.com.kidslauncher.utils.LockTimer;
@@ -74,7 +75,7 @@ public abstract class AbstractActivity extends AppCompatActivity implements
         mContinue.setOnClickListener(view -> {
             if (isMatchingPassword(mPassword.getText().toString())) {
                 showContentView(true);
-                setTimer(PreferencesUtil.getInstance().getTimerInterval() * 60 * 1000);
+                setTimer(PreferencesUtil.getInstance().getTimerInterval() * AppConstants.MILLIS_IN_MINUTE);
             } else {
                 mIputLayout.setError("Password doesn't match");
             }
@@ -94,7 +95,7 @@ public abstract class AbstractActivity extends AppCompatActivity implements
         super.onResume();
         PreferencesUtil.getInstance().getPreferences().registerOnSharedPreferenceChangeListener(this);
         if (PreferencesUtil.getInstance().isUsingTimer()) {
-            setTimer(PreferencesUtil.getInstance().getTimerInterval() * 60 * 1000);
+            setTimer(PreferencesUtil.getInstance().getTimerInterval() * AppConstants.MILLIS_IN_MINUTE);
         } else {
             stopTimer();
         }
@@ -108,11 +109,11 @@ public abstract class AbstractActivity extends AppCompatActivity implements
 
     protected void setTimer(long delay) {
         if (PreferencesUtil.getInstance().isUsingTimer()) {
-            Log.w(TAG, "setTimer timeInMinutes = " + (delay / 1000 / 60));
+            Log.w(TAG, "setTimer timeInMinutes = " + (delay / AppConstants.MILLIS_IN_SECOND / AppConstants.SECONDS_IN_MINUTE));
             if (mLockTimer != null) {
                 mLockTimer.stopTimer();
             }
-            mLockTimer = new LockTimer(delay, 1000, this);
+            mLockTimer = new LockTimer(delay, AppConstants.MILLIS_IN_SECOND, this);
             mLockTimer.start();
         }
     }
@@ -191,7 +192,7 @@ public abstract class AbstractActivity extends AppCompatActivity implements
             if (setTimer) {
                 String intervalStr = sharedPreferences.getString(getString(R.string.timer_interval_pref), getString(R.string.default_timer_value));
                 int timeInMinutes = Integer.parseInt(intervalStr);
-                setTimer(timeInMinutes * 60 * 1000);
+                setTimer(timeInMinutes * AppConstants.MILLIS_IN_MINUTE);
             } else {
                 stopTimer();
             }
