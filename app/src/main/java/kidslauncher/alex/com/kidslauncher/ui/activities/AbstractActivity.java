@@ -200,8 +200,10 @@ public abstract class AbstractActivity extends AppCompatActivity implements
     }
 
     private void stopTimer() {
-        mLockTimer.stopTimer();
-        mLockTimer = null;
+        if(mLockTimer != null) {
+            mLockTimer.stopTimer();
+            mLockTimer = null;
+        }
     }
 
     public interface PositiveAction {
