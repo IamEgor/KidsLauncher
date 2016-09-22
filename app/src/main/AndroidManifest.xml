@@ -33,12 +33,16 @@
         </activity>
         <activity
             android:name=".ui.activities.HomeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activities.HomeLauncherActivity"
             android:screenOrientation="portrait">
-            <!--<intent-filter>-->
-            <!--<action android:name="android.intent.action.MAIN" /> -->
-            <!--<category android:name="android.intent.category.HOME" /> -->
-            <!--<category android:name="android.intent.category.DEFAULT" /> -->
-            <!--</intent-filter>-->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.HOME" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".ui.activities.SelectAppsActivity"
@@ -66,6 +70,7 @@
             </intent-filter>
         </receiver>
         <!--<receiver android:name=".receivers.AlarmReceiver"/>-->
+        <service android:name=".HomeActivityWatcherService" />
     </application>
 
 </manifest>

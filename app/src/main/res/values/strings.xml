@@ -24,5 +24,6 @@
 
     <string name="enter_password">Enter password</string>
     <string name="wrong_password">Wrong password</string>
+    <string name="is_home_activity_pref">is_home_activity_pref</string>
 
 </resources>

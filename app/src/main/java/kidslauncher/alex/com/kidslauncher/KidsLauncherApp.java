@@ -1,6 +1,7 @@
 package kidslauncher.alex.com.kidslauncher;
 
 import android.app.Application;
+import android.os.IBinder;
 
 import kidslauncher.alex.com.kidslauncher.utils.PreferencesUtil;
 

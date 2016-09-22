@@ -1,6 +1,7 @@
 package kidslauncher.alex.com.kidslauncher.ui.activities;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.ListPreference;
@@ -11,10 +12,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 
+import java.util.HashMap;
+
 import kidslauncher.alex.com.kidslauncher.R;
 import kidslauncher.alex.com.kidslauncher.utils.PreferencesUtil;
 
 public class SettingsActivity extends PreferenceActivity {
+
+    public static final String KEY_PREFERENCES = "KEY_PREFERENCES";
 
     private ListPreference mListPreference;
 
@@ -49,7 +54,18 @@ public class SettingsActivity extends PreferenceActivity {
         LinearLayout root = (LinearLayout) findViewById(android.R.id.list).getParent().getParent().getParent();
         Toolbar bar = (Toolbar) LayoutInflater.from(this).inflate(R.layout.item_simple_toolbar, root, false);
         root.addView(bar, 0); // insert at top
-        bar.setNavigationOnClickListener(v -> finish());
+        bar.setNavigationOnClickListener(v -> onFinish());
     }
 
+    private void onFinish() {
+        Intent intent = new Intent();
+        intent.putExtra(KEY_PREFERENCES, new HashMap<>(PreferencesUtil.getInstance().getPreferences().getAll()));
+        setResult(RESULT_OK, intent);
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        onFinish();
+    }
 }

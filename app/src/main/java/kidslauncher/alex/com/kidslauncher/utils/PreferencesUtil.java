@@ -22,13 +22,14 @@ import static android.content.Context.MODE_PRIVATE;
 public class PreferencesUtil {
 
     public static final String PREFS_NAME = "kidslauncher_prefs";
-    ;
+
     private static final String KEY_SELECTED_APPS = "KEY_SELECTED_APPS";
     private static final String KEY_APP_PASSWORD = "KEY_APP_PASSWORD";
 
     private static final String KEY_BLOCK_INCOMING = KidsLauncherApp.getInstance().getString(R.string.block_incoming_calls_pref);
     private static final String KEY_DISABLE_WIFI = KidsLauncherApp.getInstance().getString(R.string.disable_wifi_pref);
     private static final String KEY_BOOT_ON_START = KidsLauncherApp.getInstance().getString(R.string.start_on_boot_pref);
+    private static final String KEY_IS_HOME_ACTIVITY = KidsLauncherApp.getInstance().getString(R.string.is_home_activity_pref);
 
     private static volatile PreferencesUtil instance;
 
@@ -42,16 +43,12 @@ public class PreferencesUtil {
     }
 
     public static PreferencesUtil getInstance() {
-        return PreferencesUtil.getInstance(KidsLauncherApp.getInstance());
-    }
-
-    public static PreferencesUtil getInstance(Context context) {
         PreferencesUtil localInstance = instance;
         if (localInstance == null) {
             synchronized (PreferencesUtil.class) {
                 localInstance = instance;
                 if (localInstance == null) {
-                    instance = localInstance = new PreferencesUtil(PREFS_NAME, context);
+                    instance = localInstance = new PreferencesUtil(PREFS_NAME, KidsLauncherApp.getInstance());
                 }
             }
         }
@@ -101,6 +98,14 @@ public class PreferencesUtil {
 
     public int getTimerInterval() {
         return Integer.parseInt(settings.getString(KidsLauncherApp.getInstance().getString(R.string.timer_interval_pref), KidsLauncherApp.getInstance().getResources().getString(R.string.default_timer_value)));
+    }
+
+    public boolean isHomeActivityEnabled() {
+        return getBoolean(KEY_IS_HOME_ACTIVITY);
+    }
+
+    public void setHomeActivityEnabled(boolean enabled) {
+        setBoolean(KEY_IS_HOME_ACTIVITY, enabled);
     }
 
     public void dropSelectedAppsList() {

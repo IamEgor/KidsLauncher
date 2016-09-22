@@ -2,7 +2,10 @@ package kidslauncher.alex.com.kidslauncher.ui.activities;
 
 import android.app.AlertDialog;
 import android.app.FragmentManager;
+import android.content.ComponentName;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.LayoutRes;
@@ -30,8 +33,7 @@ import kidslauncher.alex.com.kidslauncher.utils.PreferencesUtil;
 
 public abstract class AbstractActivity extends AppCompatActivity implements
         ExitDialog.ExitDialogListener,
-        LockTimer.TimerCallbacks,
-        SharedPreferences.OnSharedPreferenceChangeListener {
+        LockTimer.TimerCallbacks {
 
     public static final String TAG = AbstractActivity.class.getSimpleName();
 
@@ -87,24 +89,29 @@ public abstract class AbstractActivity extends AppCompatActivity implements
                 mIputLayout.setError("Password doesn't match");
             }
         });
-        mExitButton.setOnClickListener(view -> actAfterPasswordAccepted(this::finish));
+        mExitButton.setOnClickListener(view -> actAfterPasswordAccepted(() -> {
+            PackageManager packageManager = getPackageManager();
+            ComponentName componentName = new ComponentName(this, HomeLauncherActivity.class);
+            packageManager.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+
+            Intent selector = new Intent(Intent.ACTION_MAIN);
+            selector.addCategory(Intent.CATEGORY_HOME);
+            selector.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(selector);
+
+            packageManager.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DEFAULT, PackageManager.DONT_KILL_APP);
+            finish();
+        }));
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        PreferencesUtil.getInstance().getPreferences().registerOnSharedPreferenceChangeListener(this);
         if (PreferencesUtil.getInstance().isUsingTimer()) {
             setTimer(PreferencesUtil.getInstance().getTimerInterval() * AppConstants.MILLIS_IN_MINUTE);
         } else {
             stopTimer();
         }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        PreferencesUtil.getInstance().getPreferences().unregisterOnSharedPreferenceChangeListener(this);
     }
 
     protected void setTimer(long delay) {
@@ -148,10 +155,13 @@ public abstract class AbstractActivity extends AppCompatActivity implements
         return PreferencesUtil.getInstance().isMatchingPassword(input);
     }
 
-    protected void showExitDialog() {
-        FragmentManager fm = getFragmentManager();
-        ExitDialog exitDialog = ExitDialog.newInstance("Some Title");
-        exitDialog.show(fm, "fragment_edit_name");
+    protected boolean isMyLauncherDefault() {
+        PackageManager localPackageManager = getPackageManager();
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        String str = localPackageManager.resolveActivity(intent,
+                PackageManager.MATCH_DEFAULT_ONLY).activityInfo.packageName;
+        return str.equals(getPackageName());
     }
 
     @Override
@@ -184,24 +194,8 @@ public abstract class AbstractActivity extends AppCompatActivity implements
         mTimeIsOverView.setVisibility(b ? View.GONE : View.VISIBLE);
     }
 
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
-
-        if (getString(R.string.use_timer_pref).equals(s)) {
-            boolean setTimer = sharedPreferences.getBoolean(s, false);
-            if (setTimer) {
-                String intervalStr = sharedPreferences.getString(getString(R.string.timer_interval_pref), getString(R.string.default_timer_value));
-                int timeInMinutes = Integer.parseInt(intervalStr);
-                setTimer(timeInMinutes * AppConstants.MILLIS_IN_MINUTE);
-            } else {
-                stopTimer();
-            }
-        }
-
-    }
-
     private void stopTimer() {
-        if(mLockTimer != null) {
+        if (mLockTimer != null) {
             mLockTimer.stopTimer();
             mLockTimer = null;
         }
