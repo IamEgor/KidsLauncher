@@ -82,17 +82,7 @@ public abstract class AbstractActivity extends AppCompatActivity implements
                 mIputLayout.setError("Password doesn't match");
             }
         });
-        mExitButton.setOnClickListener(view -> actAfterPasswordAccepted(() -> {
-            Boolean hasHomeScreenEverBeenSelected = (Boolean) PreferencesUtil.getInstance()
-                    .getPreferences().getAll().get(getString(R.string.is_home_activity_pref));
-            if (hasHomeScreenEverBeenSelected != null) {
-                Intent selector = new Intent(Intent.ACTION_MAIN);
-                selector.addCategory(Intent.CATEGORY_HOME);
-                selector.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(Intent.createChooser(selector, getString(R.string.select_home_srceen_app)));
-            }
-            finish();
-        }));
+        mExitButton.setOnClickListener(view -> actAfterPasswordAccepted(this::finish));
     }
 
     @Override

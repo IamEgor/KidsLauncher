@@ -21,12 +21,6 @@
 
     <SwitchPreference
         android:defaultValue="false"
-        android:key="@string/is_home_activity_pref"
-        android:summary="Select Use KidsLauncher as Home "
-        android:title="Is home activity" />
-
-    <SwitchPreference
-        android:defaultValue="false"
         android:key="@string/use_timer_pref"
         android:title="Use timer" />
 

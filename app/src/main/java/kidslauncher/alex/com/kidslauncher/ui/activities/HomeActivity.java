@@ -1,11 +1,9 @@
 package kidslauncher.alex.com.kidslauncher.ui.activities;
 
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.view.ViewPager;
@@ -13,7 +11,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import java.util.HashMap;
 import java.util.List;
 
 import kidslauncher.alex.com.kidslauncher.HomeActivityWatcherService;
@@ -29,7 +26,6 @@ public class HomeActivity extends AbstractActivity {
 
     public static final String TAG = HomeActivity.class.getSimpleName();
     public static final int REQUEST_CODE_SELECT_APPS = 1;
-    public static final int REQUEST_CODE_PREFERENCES = 2;
 
     private View mNoAppsLayout;
     private ViewPager mViewPager;
@@ -51,7 +47,7 @@ public class HomeActivity extends AbstractActivity {
         PreferencesUtil.getInstance().setBlockWifi(childModeEnabled);
     };
     private PositiveAction settingsAction = () ->
-            startActivityForResult(new Intent(HomeActivity.this, SettingsActivity.class), REQUEST_CODE_PREFERENCES);
+            startActivity(new Intent(HomeActivity.this, SettingsActivity.class));
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,49 +92,18 @@ public class HomeActivity extends AbstractActivity {
                 mSectionsPagerAdapter.notifyDataSetChanged();
                 showContentLayout(true);
             }
-        } else if (requestCode == REQUEST_CODE_PREFERENCES) {
-            HashMap<String, ?> map = (HashMap<String, ?>) data.getSerializableExtra(SettingsActivity.KEY_PREFERENCES);
-            Boolean isHomeActivity = (Boolean) map.get(getString(R.string.is_home_activity_pref));
-            if (isHomeActivity != null) {
-                switchActivities(isHomeActivity);
-            }
         }
-    }
-
-    private void switchActivities(Boolean isHomeActivity) {
-        Log.w("switchActivities", "this instanceof HomeLauncherActivity " + (this instanceof HomeLauncherActivity));
-        if (!(this instanceof HomeLauncherActivity) && isHomeActivity) {
-            resetPreferredLauncherAndOpenChooser();
-        } else if (this instanceof HomeLauncherActivity && !isHomeActivity) {
-            Intent startMain = new Intent(this, HomeActivity.class);
-            startActivity(startMain);
-            finish();
-            if(isMyLauncherDefault()){
-                resetPreferredLauncherAndOpenChooser();
-            }
-        }
-    }
-
-    public void resetPreferredLauncherAndOpenChooser() {
-        PackageManager packageManager = getPackageManager();
-        ComponentName componentName = new ComponentName(this, HomeLauncherActivity.class);
-        packageManager.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
-
-        Intent selector = new Intent(Intent.ACTION_MAIN);
-        selector.addCategory(Intent.CATEGORY_HOME);
-        selector.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(selector);
-
-        packageManager.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DEFAULT, PackageManager.DONT_KILL_APP);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         Log.w(TAG, "onStop(); isAfterLongPressHomeButton == " + isAfterLongPressHomeButton);
-        if (mBound && (isAfterLongPressHomeButton || isAfterPressHomeButton)) {
+        if (mBound && isAfterPressHomeButton) {
             mWatcherService.restartActivity();
             isAfterPressHomeButton = false;
+        } else if (mBound && isAfterLongPressHomeButton) {
+            mWatcherService.restartActivity(1000);
             isAfterLongPressHomeButton = false;
         }
         // Unbind from the service

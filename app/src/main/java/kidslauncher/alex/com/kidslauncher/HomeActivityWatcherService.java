@@ -3,6 +3,7 @@ package kidslauncher.alex.com.kidslauncher;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -26,6 +27,10 @@ public class HomeActivityWatcherService extends Service {
     public IBinder onBind(Intent arg0) {
         Log.d(LOG_TAG, LOG_TAG + " onBind");
         return binder;
+    }
+
+    public void restartActivity(int delay) {
+        new Handler().postDelayed(this::restartActivity, delay);
     }
 
     public void restartActivity() {

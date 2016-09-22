@@ -23,12 +23,7 @@ public class LoginActivity extends AppCompatActivity {
         PreferencesUtil.getInstance().setBlockIncoming(false);
         PreferencesUtil.getInstance().setBlockWifi(false);
         if (PreferencesUtil.getInstance().isPasswordExist()) {
-            boolean homeActivityEnabled = PreferencesUtil.getInstance().isHomeActivityEnabled();
-            Class<?> launcherClass = homeActivityEnabled ? HomeLauncherActivity.class : HomeActivity.class;
-            Intent intent = new Intent(LoginActivity.this, launcherClass);
-            if (homeActivityEnabled) {
-                intent.addCategory(Intent.CATEGORY_HOME);
-            }
+            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
             startActivity(intent);
             finish();
             return;
