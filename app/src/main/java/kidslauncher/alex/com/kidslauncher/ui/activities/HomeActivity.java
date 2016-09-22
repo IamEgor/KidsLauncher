@@ -72,9 +72,6 @@ public class HomeActivity extends AbstractActivity {
             }
         });
         mHomeWatcher.startWatch();
-        // Bind to LocalService
-        Intent intent = new Intent(this, HomeActivityWatcherService.class);
-        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
@@ -96,6 +93,13 @@ public class HomeActivity extends AbstractActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        Intent intent = new Intent(this, HomeActivityWatcherService.class);
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
         Log.w(TAG, "onStop(); isAfterLongPressHomeButton == " + isAfterLongPressHomeButton);
@@ -103,7 +107,7 @@ public class HomeActivity extends AbstractActivity {
             mWatcherService.restartActivity();
             isAfterPressHomeButton = false;
         } else if (mBound && isAfterLongPressHomeButton) {
-            mWatcherService.restartActivity(1000);
+            mWatcherService.restartActivity(500);
             isAfterLongPressHomeButton = false;
         }
         // Unbind from the service
