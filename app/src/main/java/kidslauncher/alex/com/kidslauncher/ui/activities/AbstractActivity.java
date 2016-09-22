@@ -1,13 +1,9 @@
 package kidslauncher.alex.com.kidslauncher.ui.activities;
 
 import android.app.AlertDialog;
-import android.app.FragmentManager;
-import android.content.ComponentName;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -21,9 +17,6 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
-
-import java.util.Locale;
-import java.util.TimerTask;
 
 import kidslauncher.alex.com.kidslauncher.AppConstants;
 import kidslauncher.alex.com.kidslauncher.R;
@@ -90,16 +83,14 @@ public abstract class AbstractActivity extends AppCompatActivity implements
             }
         });
         mExitButton.setOnClickListener(view -> actAfterPasswordAccepted(() -> {
-            PackageManager packageManager = getPackageManager();
-            ComponentName componentName = new ComponentName(this, HomeLauncherActivity.class);
-            packageManager.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
-
-            Intent selector = new Intent(Intent.ACTION_MAIN);
-            selector.addCategory(Intent.CATEGORY_HOME);
-            selector.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(selector);
-
-            packageManager.setComponentEnabledSetting(componentName, PackageManager.COMPONENT_ENABLED_STATE_DEFAULT, PackageManager.DONT_KILL_APP);
+            Boolean hasHomeScreenEverBeenSelected = (Boolean) PreferencesUtil.getInstance()
+                    .getPreferences().getAll().get(getString(R.string.is_home_activity_pref));
+            if (hasHomeScreenEverBeenSelected != null) {
+                Intent selector = new Intent(Intent.ACTION_MAIN);
+                selector.addCategory(Intent.CATEGORY_HOME);
+                selector.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(Intent.createChooser(selector, getString(R.string.select_home_srceen_app)));
+            }
             finish();
         }));
     }

@@ -36,7 +36,6 @@ public class HomeActivity extends AbstractActivity {
 
     private boolean childModeEnabled;
     private SectionsPagerAdapter mSectionsPagerAdapter;
-    private BroadcastReceiver mReceiver;
     private boolean isAfterLongPressHomeButton;
     private boolean isAfterPressHomeButton;
     private HomeWatcher mHomeWatcher;
@@ -154,7 +153,6 @@ public class HomeActivity extends AbstractActivity {
         if (mHomeWatcher != null) {
             mHomeWatcher.stopWatch();
         }
-//        Log.w(TAG, "onDestroy(); isAfterLongPressHomeButton == " + isAfterLongPressHomeButton);
         super.onDestroy();
     }
 
