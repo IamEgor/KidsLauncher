@@ -2,6 +2,7 @@ package kidslauncher.alex.com.kidslauncher;
 
 import android.app.Application;
 
+import kidslauncher.alex.com.kidslauncher.utils.DefaultActivityLifecycleCallbacks;
 import kidslauncher.alex.com.kidslauncher.utils.PreferencesUtil;
 
 public class KidsLauncherApp extends Application {

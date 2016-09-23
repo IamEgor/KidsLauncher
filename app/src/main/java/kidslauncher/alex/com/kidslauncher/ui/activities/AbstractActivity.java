@@ -1,8 +1,6 @@
 package kidslauncher.alex.com.kidslauncher.ui.activities;
 
 import android.app.AlertDialog;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
@@ -18,7 +16,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import kidslauncher.alex.com.kidslauncher.AppConstants;
+import kidslauncher.alex.com.kidslauncher.utils.AppConstants;
 import kidslauncher.alex.com.kidslauncher.R;
 import kidslauncher.alex.com.kidslauncher.ui.fragments.ExitDialog;
 import kidslauncher.alex.com.kidslauncher.utils.LockTimer;
@@ -30,7 +28,7 @@ public abstract class AbstractActivity extends AppCompatActivity implements
 
     public static final String TAG = AbstractActivity.class.getSimpleName();
 
-    public static final String ALARM_ACTION = "kidslauncher.alex.com.kidslauncher.ui.activities.AbstractActivity";
+    public static final String ALARM_ACTION = AbstractActivity.class.getCanonicalName();
 
     protected ImageView mLeftButton;
     protected ImageView mRightButton;

@@ -1,4 +1,4 @@
-package kidslauncher.alex.com.kidslauncher;
+package kidslauncher.alex.com.kidslauncher.utils;
 
 /**
  * Created by alex on 21.9.16.

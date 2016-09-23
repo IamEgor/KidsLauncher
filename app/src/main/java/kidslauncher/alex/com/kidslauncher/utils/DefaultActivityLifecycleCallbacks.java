@@ -1,4 +1,4 @@
-package kidslauncher.alex.com.kidslauncher;
+package kidslauncher.alex.com.kidslauncher.utils;
 
 import android.app.Activity;
 import android.app.Application;

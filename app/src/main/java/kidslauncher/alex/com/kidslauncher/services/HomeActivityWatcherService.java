@@ -1,4 +1,4 @@
-package kidslauncher.alex.com.kidslauncher;
+package kidslauncher.alex.com.kidslauncher.services;
 
 import android.app.Service;
 import android.content.Intent;
