@@ -7,9 +7,7 @@ import android.content.Intent;
 import android.os.Build;
 
 import kidslauncher.alex.com.kidslauncher.KidsLauncherApp;
-import kidslauncher.alex.com.kidslauncher.receivers.AlarmReceiver;
 import kidslauncher.alex.com.kidslauncher.ui.activities.AbstractActivity;
-import kidslauncher.alex.com.kidslauncher.ui.activities.HomeActivity;
 
 public class AlarmUtils {
 

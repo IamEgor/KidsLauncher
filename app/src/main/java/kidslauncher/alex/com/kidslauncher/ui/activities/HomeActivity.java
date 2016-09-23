@@ -27,6 +27,8 @@ public class HomeActivity extends AbstractActivity {
     public static final String TAG = HomeActivity.class.getSimpleName();
     public static final int REQUEST_CODE_SELECT_APPS = 1;
 
+    private static final int AFTER_LONG_PRESS_ON_HOME_BUTTON = 500;
+
     private View mNoAppsLayout;
     private ViewPager mViewPager;
 
@@ -34,7 +36,7 @@ public class HomeActivity extends AbstractActivity {
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private boolean isAfterLongPressHomeButton;
     private boolean isAfterPressHomeButton;
-    private HomeWatcher mHomeWatcher;
+    private HomeWatcher mHomeButtonWatcher;
 
     private HomeActivityWatcherService mWatcherService;
     private boolean mBound = false;
@@ -57,8 +59,8 @@ public class HomeActivity extends AbstractActivity {
     }
 
     protected void initHomeButtonActors() {
-        mHomeWatcher = new HomeWatcher(this);
-        mHomeWatcher.setOnHomePressedListener(new OnHomePressedListener() {
+        mHomeButtonWatcher = new HomeWatcher(this);
+        mHomeButtonWatcher.setOnHomePressedListener(new OnHomePressedListener() {
             @Override
             public void onHomePressed() {
                 Log.w(TAG, "HomeWatcher.onHomePressed()");
@@ -71,7 +73,6 @@ public class HomeActivity extends AbstractActivity {
                 isAfterLongPressHomeButton = true;
             }
         });
-        mHomeWatcher.startWatch();
     }
 
     @Override
@@ -93,21 +94,25 @@ public class HomeActivity extends AbstractActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onResume() {
+        super.onResume();
+        mHomeButtonWatcher.startWatch();
+        // Bind the service
         Intent intent = new Intent(this, HomeActivityWatcherService.class);
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+        startService(intent);
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onPause() {
+        super.onPause();
+        Log.w(TAG, "onStop(); isAfterPressHomeButton == " + isAfterPressHomeButton);
         Log.w(TAG, "onStop(); isAfterLongPressHomeButton == " + isAfterLongPressHomeButton);
         if (mBound && isAfterPressHomeButton) {
             mWatcherService.restartActivity();
             isAfterPressHomeButton = false;
         } else if (mBound && isAfterLongPressHomeButton) {
-            mWatcherService.restartActivity(500);
+            mWatcherService.restartActivity(AFTER_LONG_PRESS_ON_HOME_BUTTON);
             isAfterLongPressHomeButton = false;
         }
         // Unbind from the service
@@ -115,14 +120,9 @@ public class HomeActivity extends AbstractActivity {
             unbindService(mConnection);
             mBound = false;
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        if (mHomeWatcher != null) {
-            mHomeWatcher.stopWatch();
+        if (mHomeButtonWatcher != null) {
+            mHomeButtonWatcher.stopWatch();
         }
-        super.onDestroy();
     }
 
     @Override

@@ -33,6 +33,7 @@
         </activity>
         <activity
             android:name=".ui.activities.HomeActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activities.SelectAppsActivity"
@@ -40,6 +41,11 @@
         <activity
             android:name=".ui.activities.SettingsActivity"
             android:label="@string/title_activity_settings" />
+
+
+        <service android:name=".HomeActivityWatcherService" />
+
+
         <receiver
             android:name=".receivers.CallReceiver"
             android:exported="false">
@@ -60,7 +66,7 @@
             </intent-filter>
         </receiver>
         <!--<receiver android:name=".receivers.AlarmReceiver"/>-->
-        <service android:name=".HomeActivityWatcherService" />
+
     </application>
 
 </manifest>

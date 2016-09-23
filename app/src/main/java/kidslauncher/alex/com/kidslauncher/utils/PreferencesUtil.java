@@ -22,6 +22,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class PreferencesUtil {
 
     public static final String PREFS_NAME = "kidslauncher_prefs";
+    public static final String KEY_IS_CLOSE_ALLOWED = "KEY_IS_CLOSE_ALLOWED";
 
     private static final String KEY_SELECTED_APPS = "KEY_SELECTED_APPS";
     private static final String KEY_APP_PASSWORD = "KEY_APP_PASSWORD";
@@ -77,6 +78,14 @@ public class PreferencesUtil {
             e.printStackTrace();
         }
         return false;
+    }
+
+    public boolean isCloseAllowed() {
+        return getBoolean(KEY_IS_CLOSE_ALLOWED);
+    }
+
+    public void setCloseAllowed(boolean allowed) {
+        setBoolean(KEY_IS_CLOSE_ALLOWED, allowed);
     }
 
     public void setSelectedApps(List<AppItemModel> selectedApps) {

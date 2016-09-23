@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import kidslauncher.alex.com.kidslauncher.ui.activities.HomeActivity;
+import kidslauncher.alex.com.kidslauncher.utils.PreferencesUtil;
 
 
 public class HomeActivityWatcherService extends Service {
@@ -19,13 +20,19 @@ public class HomeActivityWatcherService extends Service {
 
     public void onCreate() {
         super.onCreate();
-        Log.d(LOG_TAG, LOG_TAG + " onCreate");
+        Log.w(LOG_TAG, LOG_TAG + " onCreate");
+        if (!PreferencesUtil.getInstance().isCloseAllowed()) {
+            restartActivity();
+        } else {
+            PreferencesUtil.getInstance().setCloseAllowed(false);
+            stopSelf();
+        }
     }
 
     @Nullable
     @Override
     public IBinder onBind(Intent arg0) {
-        Log.d(LOG_TAG, LOG_TAG + " onBind");
+        Log.w(LOG_TAG, LOG_TAG + " onBind");
         return binder;
     }
 
@@ -38,6 +45,13 @@ public class HomeActivityWatcherService extends Service {
         i.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(i);
+        Log.d(LOG_TAG, LOG_TAG + " restartActivity");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.w(LOG_TAG, LOG_TAG + " onDestroy");
     }
 
     public class MyBinder extends Binder {

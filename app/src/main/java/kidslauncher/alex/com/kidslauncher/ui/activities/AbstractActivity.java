@@ -82,7 +82,10 @@ public abstract class AbstractActivity extends AppCompatActivity implements
                 mIputLayout.setError("Password doesn't match");
             }
         });
-        mExitButton.setOnClickListener(view -> actAfterPasswordAccepted(this::finish));
+        mExitButton.setOnClickListener(view -> actAfterPasswordAccepted(() -> {
+            PreferencesUtil.getInstance().setCloseAllowed(true);
+            finish();
+        }));
     }
 
     @Override
@@ -134,15 +137,6 @@ public abstract class AbstractActivity extends AppCompatActivity implements
 
     private boolean isMatchingPassword(String input) {
         return PreferencesUtil.getInstance().isMatchingPassword(input);
-    }
-
-    protected boolean isMyLauncherDefault() {
-        PackageManager localPackageManager = getPackageManager();
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_HOME);
-        String str = localPackageManager.resolveActivity(intent,
-                PackageManager.MATCH_DEFAULT_ONLY).activityInfo.packageName;
-        return str.equals(getPackageName());
     }
 
     @Override

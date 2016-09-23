@@ -1,7 +1,6 @@
 package kidslauncher.alex.com.kidslauncher;
 
 import android.app.Application;
-import android.os.IBinder;
 
 import kidslauncher.alex.com.kidslauncher.utils.PreferencesUtil;
 
@@ -13,6 +12,7 @@ public class KidsLauncherApp extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
+        registerActivityLifecycleCallbacks(new DefaultActivityLifecycleCallbacks());
     }
 
     @Override
