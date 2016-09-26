@@ -5,4 +5,6 @@ public interface OnHomePressedListener {
     void onHomePressed();
 
     void onHomeLongPressed();
+
+    void onGoogleHelperCall();
 }

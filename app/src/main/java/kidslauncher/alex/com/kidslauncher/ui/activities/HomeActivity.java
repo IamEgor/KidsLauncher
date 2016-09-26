@@ -43,6 +43,7 @@ public class HomeActivity extends AbstractActivity {
         initViews();
     }
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data == null) {

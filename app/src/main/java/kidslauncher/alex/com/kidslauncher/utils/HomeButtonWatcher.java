@@ -13,7 +13,7 @@ public class HomeButtonWatcher {
     private Context mContext;
     private IntentFilter mFilter;
     private OnHomePressedListener mListener;
-    private InnerRecevier mRecevier;
+    private InnerReceiver mReceiver;
 
     public HomeButtonWatcher(Context context) {
         mContext = context;
@@ -22,26 +22,28 @@ public class HomeButtonWatcher {
 
     public void setOnHomePressedListener(OnHomePressedListener listener) {
         mListener = listener;
-        mRecevier = new InnerRecevier();
+        mReceiver = new InnerReceiver();
     }
 
     public void startWatch() {
-        if (mRecevier != null) {
-            mContext.registerReceiver(mRecevier, mFilter);
+        if (mReceiver != null) {
+            mContext.registerReceiver(mReceiver, mFilter);
         }
     }
 
     public void stopWatch() {
-        if (mRecevier != null) {
-            mContext.unregisterReceiver(mRecevier);
+        if (mReceiver != null) {
+            mContext.unregisterReceiver(mReceiver);
         }
     }
 
-    class InnerRecevier extends BroadcastReceiver {
-        final String SYSTEM_DIALOG_REASON_KEY = "reason";
-        final String SYSTEM_DIALOG_REASON_GLOBAL_ACTIONS = "globalactions";
-        final String SYSTEM_DIALOG_REASON_RECENT_APPS = "recentapps";
-        final String SYSTEM_DIALOG_REASON_HOME_KEY = "homekey";
+    class InnerReceiver extends BroadcastReceiver {
+
+        private final String SYSTEM_DIALOG_REASON_KEY = "reason";
+        private final String SYSTEM_DIALOG_REASON_GLOBAL_ACTIONS = "globalactions";
+        private final String SYSTEM_DIALOG_REASON_RECENT_APPS = "recentapps";
+        private final String SYSTEM_DIALOG_REASON_HOME_KEY = "homekey";
+        private final String SYSTEM_DIALOG_REASON_ASSIST = "assist";
 
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -55,6 +57,8 @@ public class HomeButtonWatcher {
                             mListener.onHomePressed();
                         } else if (reason.equals(SYSTEM_DIALOG_REASON_RECENT_APPS)) {
                             mListener.onHomeLongPressed();
+                        } else if (reason.equals(SYSTEM_DIALOG_REASON_ASSIST)) {
+                            mListener.onGoogleHelperCall();
                         }
                     }
                 }

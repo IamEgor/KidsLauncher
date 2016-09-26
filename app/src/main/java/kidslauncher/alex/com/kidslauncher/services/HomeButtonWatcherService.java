@@ -47,6 +47,15 @@ public class HomeButtonWatcherService extends Service {
                     }
                 }
 
+                @Override
+                public void onGoogleHelperCall() {
+                    Log.w(LOG_TAG, "HomeButtonWatcher.onGoogleHelperCall() \n" +
+                            "needToRestartActivity = " + needToRestartActivity());
+                    if (needToRestartActivity()) {
+                        restartActivity(AFTER_LONG_PRESS_ON_HOME_BUTTON);
+                    }
+                }
+
                 private boolean needToRestartActivity() {
                     return !PreferencesUtil.getInstance().isCloseAllowed();
                 }
