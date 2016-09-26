@@ -6,16 +6,16 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.util.Log;
 
-public class HomeWatcher {
+public class HomeButtonWatcher {
 
-    private static final String TAG = HomeWatcher.class.getSimpleName();
+    private static final String TAG = HomeButtonWatcher.class.getSimpleName();
 
     private Context mContext;
     private IntentFilter mFilter;
     private OnHomePressedListener mListener;
     private InnerRecevier mRecevier;
 
-    public HomeWatcher(Context context) {
+    public HomeButtonWatcher(Context context) {
         mContext = context;
         mFilter = new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
     }

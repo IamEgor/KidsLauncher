@@ -7,7 +7,13 @@ import android.util.Log;
 
 public class DefaultActivityLifecycleCallbacks implements Application.ActivityLifecycleCallbacks {
 
-    public static final String TAG = DefaultActivityLifecycleCallbacks.class.getSimpleName();
+    private static final String TAG = DefaultActivityLifecycleCallbacks.class.getSimpleName();
+
+    private int activitiesInForegroundCount;
+
+    public int getActivitiesInForegroundCount() {
+        return activitiesInForegroundCount;
+    }
 
     @Override
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
@@ -16,6 +22,8 @@ public class DefaultActivityLifecycleCallbacks implements Application.ActivityLi
 
     @Override
     public void onActivityStarted(Activity activity) {
+        activitiesInForegroundCount++;
+        PreferencesUtil.getInstance().setAppInForegroundStatus(activitiesInForegroundCount > 0);
         Log.w(TAG, "onActivityStarted : " + activity.getClass().getSimpleName());
     }
 
@@ -31,6 +39,8 @@ public class DefaultActivityLifecycleCallbacks implements Application.ActivityLi
 
     @Override
     public void onActivityStopped(Activity activity) {
+        activitiesInForegroundCount--;
+        PreferencesUtil.getInstance().setAppInForegroundStatus(activitiesInForegroundCount > 0);
         Log.w(TAG, "onActivityStopped : " + activity.getClass().getSimpleName());
     }
 

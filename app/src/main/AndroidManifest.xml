@@ -6,11 +6,9 @@
     <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
     <uses-permission android:name="android.permission.MODIFY_PHONE_STATE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
-
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
@@ -28,11 +26,13 @@
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".ui.activities.HomeActivity"
+            android:excludeFromRecents="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
@@ -41,9 +41,16 @@
         <activity
             android:name=".ui.activities.SettingsActivity"
             android:label="@string/title_activity_settings" />
+        <activity
+            android:name=".ui.activities.FullscreenSplashActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_fullscreen"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/FullscreenTheme" />
 
 
-        <service android:name=".services.HomeActivityWatcherService" />
+        <service android:name=".services.HomeButtonWatcherService" />
 
 
         <receiver
@@ -65,8 +72,7 @@
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
             </intent-filter>
         </receiver>
-        <!--<receiver android:name=".receivers.AlarmReceiver"/>-->
-
+        <!-- <receiver android:name=".receivers.AlarmReceiver"/> -->
     </application>
 
 </manifest>

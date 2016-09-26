@@ -82,6 +82,8 @@ public abstract class AbstractActivity extends AppCompatActivity implements
         });
         mExitButton.setOnClickListener(view -> actAfterPasswordAccepted(() -> {
             PreferencesUtil.getInstance().setCloseAllowed(true);
+            PreferencesUtil.getInstance().setBlockIncoming(false);
+            PreferencesUtil.getInstance().setBlockWifi(false);
             finish();
         }));
     }

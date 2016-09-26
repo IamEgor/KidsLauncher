@@ -9,18 +9,18 @@ public class KidsLauncherApp extends Application {
 
     private static KidsLauncherApp instance;
 
+    private DefaultActivityLifecycleCallbacks callback;
+
     @Override
     public void onCreate() {
         super.onCreate();
         instance = this;
-        registerActivityLifecycleCallbacks(new DefaultActivityLifecycleCallbacks());
+        callback = new DefaultActivityLifecycleCallbacks();
+        registerActivityLifecycleCallbacks(callback);
     }
 
-    @Override
-    public void onTerminate() {
-        PreferencesUtil.getInstance().setBlockIncoming(false);
-        PreferencesUtil.getInstance().setBlockWifi(false);
-        super.onTerminate();
+    public int getActiveActivitiesCount(){
+        return callback.getActivitiesInForegroundCount();
     }
 
     public static KidsLauncherApp getInstance() {

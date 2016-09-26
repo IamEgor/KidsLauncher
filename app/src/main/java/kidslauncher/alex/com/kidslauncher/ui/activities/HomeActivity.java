@@ -1,11 +1,7 @@
 package kidslauncher.alex.com.kidslauncher.ui.activities;
 
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
@@ -13,13 +9,11 @@ import android.widget.Toast;
 
 import java.util.List;
 
-import kidslauncher.alex.com.kidslauncher.services.HomeActivityWatcherService;
 import kidslauncher.alex.com.kidslauncher.R;
+import kidslauncher.alex.com.kidslauncher.services.HomeButtonWatcherService;
 import kidslauncher.alex.com.kidslauncher.ui.adapters.SectionsPagerAdapter;
 import kidslauncher.alex.com.kidslauncher.ui.models.AppItemModel;
 import kidslauncher.alex.com.kidslauncher.utils.CommonUtils;
-import kidslauncher.alex.com.kidslauncher.utils.HomeWatcher;
-import kidslauncher.alex.com.kidslauncher.utils.OnHomePressedListener;
 import kidslauncher.alex.com.kidslauncher.utils.PreferencesUtil;
 
 public class HomeActivity extends AbstractActivity {
@@ -27,20 +21,11 @@ public class HomeActivity extends AbstractActivity {
     public static final String TAG = HomeActivity.class.getSimpleName();
     public static final int REQUEST_CODE_SELECT_APPS = 1;
 
-    private static final int AFTER_LONG_PRESS_ON_HOME_BUTTON = 500;
-    private static final int DEFAULT_START_ACTIVITY_DELAY = 5001;
-
     private View mNoAppsLayout;
     private ViewPager mViewPager;
 
     private boolean childModeEnabled;
     private SectionsPagerAdapter mSectionsPagerAdapter;
-    private boolean isAfterLongPressHomeButton;
-    private boolean isAfterPressHomeButton;
-    private HomeWatcher mHomeButtonWatcher;
-
-    private HomeActivityWatcherService mWatcherService;
-    private boolean mBound = false;
 
     private PositiveAction turnOn = () -> {
         childModeEnabled = !childModeEnabled;
@@ -56,24 +41,6 @@ public class HomeActivity extends AbstractActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initViews();
-        initHomeButtonActors();
-    }
-
-    protected void initHomeButtonActors() {
-        mHomeButtonWatcher = new HomeWatcher(this);
-        mHomeButtonWatcher.setOnHomePressedListener(new OnHomePressedListener() {
-            @Override
-            public void onHomePressed() {
-                Log.w(TAG, "HomeWatcher.onHomePressed()");
-                isAfterPressHomeButton = true;
-            }
-
-            @Override
-            public void onHomeLongPressed() {
-                Log.w(TAG, "HomeWatcher.onHomeLongPressed()");
-                isAfterLongPressHomeButton = true;
-            }
-        });
     }
 
     @Override
@@ -97,33 +64,7 @@ public class HomeActivity extends AbstractActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        mHomeButtonWatcher.startWatch();
-        // Bind the service
-        Intent intent = new Intent(this, HomeActivityWatcherService.class);
-        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
-        startService(intent);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.w(TAG, "onStop(); isAfterPressHomeButton == " + isAfterPressHomeButton);
-        Log.w(TAG, "onStop(); isAfterLongPressHomeButton == " + isAfterLongPressHomeButton);
-        if (mBound && isAfterPressHomeButton) {
-            mWatcherService.restartActivity(DEFAULT_START_ACTIVITY_DELAY);
-            isAfterPressHomeButton = false;
-        } else if (mBound && isAfterLongPressHomeButton) {
-            mWatcherService.restartActivity(AFTER_LONG_PRESS_ON_HOME_BUTTON);
-            isAfterLongPressHomeButton = false;
-        }
-        // Unbind from the service
-        if (mBound) {
-            unbindService(mConnection);
-            mBound = false;
-        }
-        if (mHomeButtonWatcher != null) {
-            mHomeButtonWatcher.stopWatch();
-        }
+        startService(new Intent(this, HomeButtonWatcherService.class));
     }
 
     @Override
@@ -169,25 +110,5 @@ public class HomeActivity extends AbstractActivity {
         mViewPager.setVisibility(show ? View.VISIBLE : View.GONE);
         mNoAppsLayout.setVisibility(show ? View.GONE : View.VISIBLE);
     }
-
-    /**
-     * Defines callbacks for service binding, passed to bindService()
-     */
-    private ServiceConnection mConnection = new ServiceConnection() {
-
-        @Override
-        public void onServiceConnected(ComponentName className,
-                                       IBinder service) {
-            // We've bound to LocalService, cast the IBinder and get LocalService instance
-            HomeActivityWatcherService.MyBinder binder = (HomeActivityWatcherService.MyBinder) service;
-            mWatcherService = binder.getService();
-            mBound = true;
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName arg0) {
-            mBound = false;
-        }
-    };
 
 }

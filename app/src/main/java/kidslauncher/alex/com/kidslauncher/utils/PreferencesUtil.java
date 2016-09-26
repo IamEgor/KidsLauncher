@@ -26,6 +26,7 @@ public class PreferencesUtil {
 
     private static final String KEY_SELECTED_APPS = "KEY_SELECTED_APPS";
     private static final String KEY_APP_PASSWORD = "KEY_APP_PASSWORD";
+    private static final String KEY_IS_APP_IN_FOREGROUND = "KEY_IS_APP_IN_FOREGROUND";
 
     private static final String KEY_BLOCK_INCOMING = KidsLauncherApp.getInstance().getString(R.string.block_incoming_calls_pref);
     private static final String KEY_DISABLE_WIFI = KidsLauncherApp.getInstance().getString(R.string.disable_wifi_pref);
@@ -106,6 +107,14 @@ public class PreferencesUtil {
 
     public int getTimerInterval() {
         return Integer.parseInt(settings.getString(KidsLauncherApp.getInstance().getString(R.string.timer_interval_pref), KidsLauncherApp.getInstance().getResources().getString(R.string.default_timer_value)));
+    }
+
+    public boolean isAppInForeground() {
+        return getBoolean(KEY_IS_APP_IN_FOREGROUND);
+    }
+
+    public void setAppInForegroundStatus(boolean isInForeground) {
+        setBoolean(KEY_IS_APP_IN_FOREGROUND, isInForeground);
     }
 
     public void dropSelectedAppsList() {
